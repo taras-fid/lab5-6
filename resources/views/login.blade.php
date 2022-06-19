@@ -91,7 +91,7 @@
                 <li style=" top: 17px;">
                     <input type="password" name="password" placeholder="ПАРОЛЬ.." />
                 </li>
-                <a href="login"><h5 style="top: 40px;">Зареєструватись</h5></a>
+                <a href="registration"><h5 style="top: 40px;">Зареєструватись</h5></a>
                 <button style=" top: 45px;" type="submit">Увійти</button>
                 <?php if (isset($error)):?>
                 <h5 style="top: 50px; color: #D51B1B; font-size: 25px"><?= $error ?></h5>

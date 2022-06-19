@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Worker;
 
 class RegisterController extends Controller
 {
@@ -16,6 +17,7 @@ class RegisterController extends Controller
     }
 
     public function registration_post(Request $request) {
+        $worker = new Worker();
         $login = $request -> input('login');
         $password = $request -> input('password');
         $rep_password = $request -> input('rep_password');
@@ -34,13 +36,16 @@ class RegisterController extends Controller
             array_push($errors, 'pass != rep_pass');
         }
         if (count($errors) === 0) {
+            $worker->$login = $login;
+            $worker->$password = $password;
+            $worker->save();
             return view('welcome', [
                 'user' => $user
             ]);
         }
         else {
             return view('registration', ['errors' => $errors]);
-            //return redirect()->route('/registration', $errors);
+            //return redirect()->route('/registration');
         }
     }
 }
