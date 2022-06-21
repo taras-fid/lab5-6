@@ -49,12 +49,12 @@ class LoginController extends Controller
                 }
                 else {
                     array_push($errors, 'false password');
-                    return redirect()->route('login.host', ['error' => $errors]);
+                    return redirect()->route('login.host', ['errors' => $errors]);
                 }
             }
         }
         array_push($errors, 'no user with this login');
-        return redirect()->route('login.host', ['error' => $errors]);
+        return redirect()->route('login.host', ['errors' => $errors]);
     }
 }
 

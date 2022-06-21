@@ -59,7 +59,7 @@ class RegisterController extends Controller
             ]);
         }
         else {
-            return view('registration', ['errors' => $errors]);
+            return redirect()->route('registration.host', ['errors' => $errors]);
             //return redirect()->route('/registration');
         }
     }
