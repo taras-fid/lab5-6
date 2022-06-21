@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('position'); // 3->Boss, 2->Admin, 1->Worker
-            //$table->timestamps();
+            $table->timestamps();
         });
     }
 

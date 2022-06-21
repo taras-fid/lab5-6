@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Worker;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -36,9 +38,22 @@ class RegisterController extends Controller
             array_push($errors, 'pass != rep_pass');
         }
         if (count($errors) === 0) {
-            $worker->$login = $login;
-            $worker->$password = $password;
-            $worker->save();
+            DB::table('roles')->insert([
+                [
+                    'login' => $login,
+                    'password' => $password,
+                    "created_at" =>  Carbon::now(), # new \Datetime()
+                    "updated_at" => Carbon::now(),  # new \Datetime()
+                ],
+            ]);
+            DB::table('workers')->insert([
+                [
+                    'name' => '',
+                    'position' => 1,
+                    "created_at" =>  Carbon::now(), # new \Datetime()
+                    "updated_at" => Carbon::now(),  # new \Datetime()
+                ],
+            ]);
             return view('welcome', [
                 'user' => $user
             ]);
