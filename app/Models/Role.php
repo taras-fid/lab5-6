@@ -9,8 +9,8 @@ class Role extends Model
 {
     use HasFactory;
 
-    public function worker()
+    public function workers()
     {
-        return $this->belongsTo('App\Models\Worker');
+        return $this->belongsToMany(Worker::class);
     }
 }

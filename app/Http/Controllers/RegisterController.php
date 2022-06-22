@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Models\Worker;
+use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
@@ -14,12 +14,9 @@ class RegisterController extends Controller
         return view('registration');
     }
 
-    public function registration_error($errors) {
-        return view('registration', ['errors' => $errors]);
-    }
-
     public function registration_post(Request $request) {
-        $worker = new Worker();
+        $role_obj = new Role();
+        $roles = $role_obj->all();
         $login = $request -> input('login');
         $password = $request -> input('password');
         $rep_password = $request -> input('rep_password');
@@ -37,6 +34,11 @@ class RegisterController extends Controller
         if ($password !== $rep_password) {
             array_push($errors, 'pass != rep_pass');
         }
+        foreach ($roles as $user) {
+            if ($user->login === $login) {
+                array_push($errors, 'there is user with ur login');
+            }
+        }
         if (count($errors) === 0) {
             DB::table('roles')->insert([
                 [
@@ -46,20 +48,22 @@ class RegisterController extends Controller
                     "updated_at" => Carbon::now(),  # new \Datetime()
                 ],
             ]);
-            DB::table('workers')->insert([
+            $role_id = DB::table('roles')->latest('updated_at')->first();
+            DB::table('role_worker')->insert([
                 [
-                    'name' => '',
-                    'position' => 1,
+                    'role_id' => $role_id->id,
+                    'worker_id' => 1,
                     "created_at" =>  Carbon::now(), # new \Datetime()
                     "updated_at" => Carbon::now(),  # new \Datetime()
                 ],
             ]);
+            setcookie('login', $login, 0, '/');
             return view('welcome', [
                 'user' => $user
             ]);
         }
         else {
-            return redirect()->route('registration.host', ['errors' => $errors]);
+            return view('registration', ['errors' => $errors]);
             //return redirect()->route('/registration');
         }
     }

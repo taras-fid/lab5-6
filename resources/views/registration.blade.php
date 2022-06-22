@@ -83,7 +83,7 @@
 @section('content')
     <div class="log_in_page">
         <h1 style="position:relative; left: 10%">Registration</h1>
-        <form action="registration/check" method="POST">
+        <form action="/registration/check" method="POST">
             @csrf
             <ul class="log_in_box">
                 <li>

@@ -15,10 +15,6 @@ class LoginController extends Controller
         return view('registration');
     }
 
-    public function login_error($errors) {
-        return view('login', ['errors' => $errors]);
-    }
-
     public function login_post(Request $request) {
         $login = $request -> input('login');
         $password = $request -> input('password');
@@ -36,25 +32,17 @@ class LoginController extends Controller
         foreach ($all_users as $user) {
             if($user->login === $login) {
                 if($user->password === $password) {
-                    foreach ($all_roles as $item) {
-                        if ($item->role_login === $login) {
-                            $role = $item;
-                        }
-                        else {
-                            $role = null;
-                        }
-                    }
+                    $role = 3;
                     setcookie('login', $login, 0, '/');
-                    return redirect()->route('about.host', ['user'=>$user], ['role'=>$role]);
+                    return view('about', ['user'=>$user], ['role'=>$role]);
                 }
                 else {
                     array_push($errors, 'false password');
-                    return redirect()->route('login.host', ['errors' => $errors]);
+                    return view('login', ['errors' => $errors]);
                 }
             }
         }
         array_push($errors, 'no user with this login');
-        return redirect()->route('login.host', ['errors' => $errors]);
+        return view('login', ['errors' => $errors]);
     }
 }
-
